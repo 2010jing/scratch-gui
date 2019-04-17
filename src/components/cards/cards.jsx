@@ -12,6 +12,7 @@ import helpIcon from '../../lib/assets/icon--tutorials.svg';
 import closeIcon from './icon--close.svg';
 
 import {translateVideo} from '../../lib/libraries/decks/translate-video.js';
+import {translateImage} from '../../lib/libraries/decks/translate-image.js';
 
 const CardHeader = ({onCloseCards, onShowAll, totalSteps, step}) => (
     <div className={styles.headerButtons}>
@@ -68,11 +69,11 @@ const VideoStep = ({video, dragging}) => (
             allowFullScreen
             allowTransparency="true"
             frameBorder="0"
-            height="338"
+            height="257"
             scrolling="no"
             src={`https://fast.wistia.net/embed/iframe/${video}?seo=false&videoFoam=true`}
             title="📹"
-            width="600"
+            width="466"
         />
         <script
             async
@@ -234,7 +235,11 @@ const Cards = props => {
     if (x === 0 && y === 0) {
         // initialize positions
         x = isRtl ? -292 : 292;
-        y = 365;
+        // The tallest cards are about 385px high, and the default position is pinned
+        // to near the bottom of the blocks palette to allow room to work above.
+        const tallCardHeight = 385;
+        const bottomMargin = 60; // To avoid overlapping the backpack region
+        y = window.innerHeight - tallCardHeight - bottomMargin;
     }
 
     const steps = content[activeDeckId].steps;
@@ -271,7 +276,7 @@ const Cards = props => {
                                 />
                             ) : (
                                 <ImageStep
-                                    image={steps[step].image}
+                                    image={translateImage(steps[step].image, locale)}
                                     title={steps[step].title}
                                 />
                             )
